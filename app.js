@@ -12,6 +12,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { Server } from "socket.io";
 
+// Load environment variables
+const { MONGODB_URI, MONGODB_DBNAME } = process.env;
+
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -80,12 +83,12 @@ app.use(cookieParser());
 
 // Database connection
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(`${MONGODB_URI}/${MONGODB_DBNAME}`)
   .then(() => {
     console.log("Database connection is ready.");
   })
   .catch((err) => {
-    console.log("Database connection failed. Exiting now...", err);
+    console.error("Database connection failed. Exiting now...", err);
     process.exit(1);
   });
 
